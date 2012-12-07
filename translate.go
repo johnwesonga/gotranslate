@@ -11,7 +11,7 @@ import (
 
 const (
 	api     = "https://www.googleapis.com/language/translate/v2"
-	API_KEY = "PU_API_KEY_HERE"
+	API_KEY = "SERVER_API_KEY"
 )
 
 type InputText struct {
@@ -21,10 +21,11 @@ type InputText struct {
 }
 
 type Translation struct {
-	Data         string
-	Translations []struct {
-		TranslatedText string
-		SourceLanguage string
+	Data struct {
+		Translations []struct {
+			TranslatedText         string
+			DetectedSourceLanguage string
+		}
 	}
 }
 
@@ -60,5 +61,9 @@ func (i *InputText) TranslateString() (*Translation, error) {
 func main() {
 	input := &InputText{"My name is John, I was born in Nairobi and I am 31 years old", "ES", nil}
 	translation, _ := input.TranslateString()
-	fmt.Println(translation)
+	for _, t := range translation.Data.Translations {
+		fmt.Printf("----\n")
+		fmt.Printf("translatedText: %s\n", t.TranslatedText)
+		fmt.Printf("detectedSourceLanguage: %s\n", t.DetectedSourceLanguage)
+	}
 }
